@@ -1,13 +1,18 @@
 # Video Swear Jar - The AI-Powered Profanity Filter
 
-Introducing Video Swear Jar, your AI-powered solution for clean video content! This project offers a Docker container with all necessary tools to process videos. It transcribes, detects profanity, and trims out inappropriate language, delivering a new, family-friendly video file. Embrace the convenience of our all-in-one profanity filtering solution and create a suitable viewing experience for all ages.
+Introducing Video Swear Jar, your AI-powered solution for creating clean video content! This project offers a Docker container with all necessary tools to process videos, transcribe the audio, detect profanity, and remove inappropriate language, delivering a new, family-friendly video file.
+
+## Project Goals
+- Simplify the process of removing profanity from video files. The current process is quite technical, and we aim to make it more user-friendly.
+- Enable local processing without relying on an internet connection.
+- Minimize cost for users by keeping the solution as affordable as possible.
 
 ## Process Overview:
-- [OpenAI Whisper](https://github.com/openai/whisper/) to transcribe the video file
-- Node script to process the transcription file
+- Transcribe the video file using [OpenAI Whisper](https://github.com/openai/whisper/)
+- Process the transcription file with a Node script:
   - Detects profanity based on predefined [swear-jar.json](src/swear-jar.json) file
-  - Creates an ffmpeg video cut file
-- FFmpeg to cut the video file at specified times and create new video file
+  - Generate an FFmpeg video cut file.
+- Use FFmpeg to cut the video file at specified times and create a new, edited video file.
 
 ## Requirements:
 - Docker
@@ -34,15 +39,24 @@ make swear_jar VIDEO_FILE=video.mkv
 make cut_video VIDEO_FILE=video.mkv
 ```
 
-## TODO
+## Roadmap
 - [x] Add Node to container to run everything within the container
 - [ ] Finalize initial documentation with required steps to run
-- [ ] Build scripts into container to not use root Makefile as the local interface
+- [ ] Include scripts into container to not use root Makefile as the local interface
 - [ ] Publish image to GitHub Packages
 - [ ] Clean up files after process is complete
 - [ ] Create CI jobs to run on PRs
 - [ ] Create build jobs to version and publish to GH Packages
 
-## Features
-- [ ] Ability to pass in custom swear-jar file (both replace and add)
-- [ ] Run all processes within Node or shell script to prevent the ugly passing of variables in the Makefile
+## Future Features
+- [ ] Allow users to pass in a custom swear-jar file (replace or add)
+- [ ] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
+
+## Notes
+### Alternatives
+- [AWS Transcribe](https://aws.amazon.com/pm/transcribe/)
+- [OpenAI Whisper API](https://openai.com/blog/introducing-chatgpt-and-whisper-apis)
+
+### Tools
+- [MakeMKV](https://www.makemkv.com/) - "convert videos (DVD/Blu-ray) that you own into free and patents-unencumbered format that can be played everywhere"
+- [Handbrake](https://handbrake.fr/) - "open-source tool, built by volunteers, for converting video from nearly any format to a selection of modern, widely supported codecs"
