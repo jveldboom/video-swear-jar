@@ -56,7 +56,7 @@ View the [Whisper docs](https://github.com/openai/whisper#available-models-and-l
 
 ## Future Features
 - [ ] Allow users to pass in a custom swear-jar file (replace or add)
-- [ ] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
+- [x] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
 
 ## Notes
 ### Alternatives
