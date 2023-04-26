@@ -1,7 +1,7 @@
 # defaults
 DOCKER_TAG := video-swear-jar
 DIR := $(shell pwd)
-# VIDEO_FILE := data/test.mkv
+VIDEO_FILE := data/test.mkv
 WHISPER_MODEL := small.en
 
 build:
@@ -17,13 +17,19 @@ whisper:
 		-v ${DIR}/.whisper:/root/.cache/whisper \
 		${DOCKER_TAG} \
 		whisper ${VIDEO_FILE} \
-			--model ${WHISPER_MODEL} \
-			--language en \
+			--model ${MODEL} \
+			--language ${LANG} \
 			--output_format json \
 			--output_dir data
 
-swear_jar:
-	VIDEO_FILE=${VIDEO_FILE} node src/run.js
+swear-jar:
+	docker run -it --rm \
+		-v ${DIR}:/app \
+		-e VIDEO_FILE=${VIDEO_FILE} \
+		-e MODEL=${MODEL} \
+		-e LANG=${LANG} \
+		${DOCKER_TAG} \
+		node src/run.js
 
 cut_video:
 	docker run -it --rm \

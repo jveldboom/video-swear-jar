@@ -1,31 +1,38 @@
-const fs = require('fs')
 const utils = require('./utils')
+const video = require('./video')
 
 const paths = utils.getFilePaths(process.env.VIDEO_FILE)
-// TODO: validate expected files exist before continuing
-const transcript = utils.getTranscript(paths.transcript)
 
-const ffmpegCuts = []
-const cutWords = []
-let inpoint = 0
+const run = async () => {
+  try {
+    await video.transcribe({ inputFile: paths.inputFile, model: process.env.MODEL, language: process.env.LANG })
+  } catch (err) {
+    console.error(`Unable to transcribe ${paths.inputFile}`, err)
+    throw err
+  }
 
-for (const segment of transcript.segments) {
-  if (utils.containsSwearWords(segment.text)) {
-    const start = segment.start
-    const end = segment.end
+  // TODO: validate expected files exist before continuing
+  const transcript = video.getTranscriptSwearWords(paths.transcript)
+  if (transcript.length === 0) {
+    console.log(`No swear words found in ${paths.inputFile} - nothing else to do`)
+    return
+  }
 
-    ffmpegCuts.push(`file '${paths.cutVideo}'`)
-    ffmpegCuts.push(`inpoint ${inpoint}`)
-    ffmpegCuts.push(`outpoint ${start}`)
+  console.log(transcript)
 
-    inpoint = end
-    cutWords.push(segment.text)
+  try {
+    video.createCutFile({ transcript, paths })
+  } catch (err) {
+    console.error(`Unable to create video cut file ${paths.cutVideo}`, err)
+    throw err
+  }
+
+  try {
+    await video.cut({ cutFile: paths.cut, outputFile: paths.outputVideo })
+  } catch (err) {
+    console.error(`Unable to cut video ${paths.inputFile}`, err)
+    throw err
   }
 }
 
-// write ending inpoint to bring in remaining video
-ffmpegCuts.push(`file '${paths.cutVideo}'`)
-ffmpegCuts.push(`inpoint ${inpoint}`)
-
-fs.writeFileSync(paths.cut, ffmpegCuts.join(`\n`))
-fs.writeFileSync(paths.cutWords, cutWords.join(`\n`))
+run()
