@@ -1,0 +1,15 @@
+{
+  "name": "video-swear-jar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "run.js",
+  "scripts": {
+    "lint": "standard ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "standard": "^17.0.0"
+  }
+}

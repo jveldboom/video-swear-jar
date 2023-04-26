@@ -9,7 +9,7 @@ Introducing Video Swear Jar, your AI-powered solution for creating clean video c
 
 ## Process Overview:
 - Transcribe the video file using [OpenAI Whisper](https://github.com/openai/whisper/)
-- Process the transcription file with a Node script:
+- Process the transcription file:
   - Detects profanity based on predefined [swear-jar.json](src/swear-jar.json) file
   - Generate an FFmpeg video cut file.
 - Use FFmpeg to cut the video file at specified times and create a new, edited video file.
@@ -24,33 +24,39 @@ Introducing Video Swear Jar, your AI-powered solution for creating clean video c
 make build
 
 # create new video file with profanity removed
-make all \
-    VIDEO_FILE=video.mkv
-    WHISPER_MODEL=small.en
-
-# run steps individually
-# transcribe video to text
-make whisper VIDEO_FILE=video.mkv
-
-# detect profanity in transcription and create ffmpeg cut file
-make swear_jar VIDEO_FILE=video.mkv
-
-# cut profanity and create new video file
-make cut_video VIDEO_FILE=video.mkv
+make swear-jar \
+  VIDEO_FILE=video.mkv \
+  MODEL=small.en \
+  LANG=en
 ```
+
+## Available Whisper models and languages
+View the [Whisper docs](https://github.com/openai/whisper#available-models-and-languages) for full list and explanation for each. Below is a quick list.
+
+|  Size  | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
+|:------:|:----------:|:------------------:|:------------------:|:-------------:|:--------------:|
+|  tiny  |    39 M    |     `tiny.en`      |       `tiny`       |     ~1 GB     |      ~32x      |
+|  base  |    74 M    |     `base.en`      |       `base`       |     ~1 GB     |      ~16x      |
+| small  |   244 M    |     `small.en`     |      `small`       |     ~2 GB     |      ~6x       |
+| medium |   769 M    |    `medium.en`     |      `medium`      |     ~5 GB     |      ~2x       |
+| large  |   1550 M   |        N/A         |      `large`       |    ~10 GB     |       1x       |
+
+## Known Issues
+- `Error: Command "whisper" exited with code null` - this is likely caused by the container needing more allocated memory. Allocating at least 4 GB memory for the `small.en` usually resolved the issue but your mileage may vary.
 
 ## Roadmap
 - [x] Add Node to container to run everything within the container
-- [ ] Finalize initial documentation with required steps to run
+- [x] Finalize initial documentation with required steps to run
 - [ ] Include scripts into container to not use root Makefile as the local interface
 - [ ] Publish image to GitHub Packages
 - [ ] Clean up files after process is complete
 - [ ] Create CI jobs to run on PRs
 - [ ] Create build jobs to version and publish to GH Packages
+- [ ] Improve logging to let users know exactly what steps are being ran
 
 ## Future Features
 - [ ] Allow users to pass in a custom swear-jar file (replace or add)
-- [ ] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
+- [x] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
 
 ## Notes
 ### Alternatives
