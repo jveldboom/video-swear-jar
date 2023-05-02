@@ -5,7 +5,8 @@ const paths = utils.getFilePaths(process.env.VIDEO_FILE)
 
 const run = async () => {
   try {
-    await video.transcribe({ inputFile: paths.inputFile, model: process.env.MODEL, language: process.env.LANG })
+    const { model, language } = process.env
+    await video.transcribe({ inputFile: paths.inputFile, model, language })
   } catch (err) {
     console.error(`Unable to transcribe ${paths.inputFile}`, err)
     throw err
@@ -17,8 +18,6 @@ const run = async () => {
     console.log(`No swear words found in ${paths.inputFile} - nothing else to do`)
     return
   }
-
-  console.log(transcript)
 
   try {
     video.createCutFile({ transcript, paths })
