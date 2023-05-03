@@ -1,5 +1,5 @@
 const fs = require('fs')
-const swearJar = require('./swear-jar')
+const swearWords = require('./swear-words.json')
 const utils = require('./utils')
 
 const transcribe = async ({ inputFile, model = 'tiny.en', language = 'en' }) => {
@@ -9,7 +9,8 @@ const transcribe = async ({ inputFile, model = 'tiny.en', language = 'en' }) => 
     '--model_dir', '/app/.whisper',
     '--language', language,
     '--output_format', 'json',
-    '--output_dir', 'data'
+    '--output_dir', 'data',
+    '--fp16', 'False' // TODO: make CLI argument to use GPU
   ]
   const { stdout, stderr } = await utils.asyncSpawn('whisper', args)
   console.log('stdout:', stdout)
@@ -18,14 +19,15 @@ const transcribe = async ({ inputFile, model = 'tiny.en', language = 'en' }) => 
 
 const cut = async ({ cutFile, outputFile }) => {
   const args = [
+    '-loglevel', 'panic',
     '-f', 'concat',
     '-i', cutFile,
     '-c', 'copy',
     outputFile
   ]
   const { stdout, stderr } = await utils.asyncSpawn('ffmpeg', args)
-  console.log('stdout:', stdout)
-  console.error('stderr:', stderr)
+  if (stdout) console.log('stdout:', stdout)
+  if (stderr) console.error('stderr:', stderr)
 }
 
 // get and format transcript in known format
@@ -46,7 +48,7 @@ const getTranscriptSwearWords = (filepath) => {
 }
 
 const containsSwearWords = (text) => {
-  const pattern = swearJar.join('|')
+  const pattern = swearWords.join('|')
   const regex = new RegExp(`\\b(?:${pattern})\\b`, 'i') // 'i' flag for case-insensitive matching
   return regex.test(text)
 }

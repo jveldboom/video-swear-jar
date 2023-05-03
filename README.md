@@ -24,10 +24,8 @@ Introducing Video Swear Jar, your AI-powered solution for creating clean video c
 make build
 
 # create new video file with profanity removed
-make swear-jar \
-  VIDEO_FILE=video.mkv \
-  MODEL=small.en \
-  LANG=en
+docker run --rm -it -v $(pwd):/app video-swear-jar \
+  clean --input video.mkv --model tiny.en --language en
 ```
 
 ## Available Whisper models and languages
@@ -47,14 +45,12 @@ View the [Whisper docs](https://github.com/openai/whisper#available-models-and-l
 ## Roadmap
 - [x] Add Node to container to run everything within the container
 - [x] Finalize initial documentation with required steps to run
-- [ ] Include scripts into container to not use root Makefile as the local interface
+- [x] Include scripts into container to not use root Makefile as the local interface
 - [ ] Publish image to GitHub Packages
 - [ ] Clean up files after process is complete
 - [ ] Create CI jobs to run on PRs
 - [ ] Create build jobs to version and publish to GH Packages
 - [ ] Improve logging to let users know exactly what steps are being ran
-
-## Future Features
 - [ ] Allow users to pass in a custom swear-jar file (replace or add)
 - [x] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
 
