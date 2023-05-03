@@ -1,14 +1,23 @@
 FROM python:3.9-slim
 
-# Node.js 18 from NodeSource
+# install node.js 18 from nodesource
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+
+# install software
 RUN apt-get update \
-    && apt-get install -y ffmpeg nodejs \
+    && apt-get install -y ffmpeg nodejs npm \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# install python dependencies
 RUN pip install -U openai-whisper
+
+# add source files
+COPY src /app
 WORKDIR /app
 
-# preload models https://github.com/openai/whisper/discussions/63#discussioncomment-5276989
-# RUN python -c "import whisper; print(whisper._download(whisper._MODELS['small.en'], '$HOME/.cache/whisper', False))"
+# install node dependencies
+RUN npm install --production
+
+# add commands
+RUN ln -s /app/src/clean.js /usr/bin/clean
