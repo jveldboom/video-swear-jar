@@ -7,16 +7,15 @@ Introducing Video Swear Jar, your AI-powered solution for creating clean video c
 - Enable local processing without relying on an internet connection.
 - Minimize cost for users by keeping the solution as affordable as possible.
 
-## Process Overview:
+## Process Overview
 - Transcribe the video file using [OpenAI Whisper](https://github.com/openai/whisper/)
 - Process the transcription file:
-  - Detects profanity based on predefined [swear-jar.json](src/swear-jar.json) file
+  - Detects profanity based on predefined [swear-words.json](src/swear-words.json) file
   - Generate an FFmpeg video cut file.
 - Use FFmpeg to cut the video file at specified times and create a new, edited video file.
 
-## Requirements:
-- Docker
-- Shell environment to run Make targets (only tested on Mac)
+## Requirements
+- Docker installed
 
 ## Usage
 ```sh
@@ -46,13 +45,13 @@ View the [Whisper docs](https://github.com/openai/whisper#available-models-and-l
 - [x] Add Node to container to run everything within the container
 - [x] Finalize initial documentation with required steps to run
 - [x] Include scripts into container to not use root Makefile as the local interface
+- [x] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
+- [x] Improve logging to let users know what steps are being ran
 - [ ] Publish image to GitHub Packages
 - [ ] Clean up files after process is complete
 - [ ] Create CI jobs to run on PRs
 - [ ] Create build jobs to version and publish to GH Packages
-- [ ] Improve logging to let users know exactly what steps are being ran
-- [ ] Allow users to pass in a custom swear-jar file (replace or add)
-- [x] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
+- [ ] Allow users to pass in a custom swear-words.json file (replace or add)
 
 ## Notes
 ### Alternatives
