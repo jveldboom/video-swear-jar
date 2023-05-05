@@ -20,4 +20,5 @@ WORKDIR /app
 RUN npm install --production
 
 # add commands
-RUN ln -s /app/src/clean.js /usr/bin/clean
+RUN ln -s /app/src/clean.js /usr/bin/clean \
+    ln -s /app/src/cut-video.js /usr/bin/cut-video \

@@ -67,7 +67,7 @@ const createCutFile = ({ transcript, paths }) => {
     ffmpegCuts.push(`outpoint ${start}`)
 
     inpoint = end
-    cutWords.push(`${inpoint}-${start}\t${segment.text.trim()}`)
+    if (paths.cutWords) cutWords.push(`${inpoint}-${start}\t${segment.text.trim()}`)
   }
 
   // write ending inpoint to bring in remaining video
@@ -75,7 +75,7 @@ const createCutFile = ({ transcript, paths }) => {
   ffmpegCuts.push(`inpoint ${inpoint}`)
 
   fs.writeFileSync(paths.cut, ffmpegCuts.join('\n'))
-  fs.writeFileSync(paths.cutWords, cutWords.join('\n'))
+  if (paths.cutWords) fs.writeFileSync(paths.cutWords, cutWords.join('\n'))
 }
 
 module.exports = {
