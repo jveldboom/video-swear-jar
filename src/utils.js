@@ -5,7 +5,7 @@ const getFilePaths = (inputFile) => {
   const paths = path.parse(inputFile)
   return {
     inputFile,
-    transcript: `${paths.dir}/${paths.name}-transcript.json`,
+    transcript: `${paths.dir}/${paths.name}.json`, // automatically output by whisper in <video-file>.json
     cut: `${paths.dir}/${paths.name}-cut.txt`,
     cutVideo: paths.base, // location in cut file - ffmpeg requires video to be in same dir as cut file
     cutWords: `${paths.dir}/${paths.name}-cut-words.txt`,

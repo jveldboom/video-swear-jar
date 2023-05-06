@@ -77,6 +77,7 @@ docker run --rm -it -v $(pwd):/app video-swear-jar \
 - [x] Include scripts into container to not use root Makefile as the local interface
 - [x] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
 - [x] Improve logging to let users know what steps are being ran
+- [ ] Allow user to define output directory
 - [ ] Publish image to GitHub Packages
 - [ ] Clean up files after process is complete
 - [ ] Create CI jobs to run on PRs
