@@ -27,19 +27,49 @@ docker run --rm -it -v $(pwd):/app video-swear-jar \
   clean --input video.mkv --model tiny.en --language en
 ```
 
-## Available Whisper models and languages
-View the [Whisper docs](https://github.com/openai/whisper#available-models-and-languages) for full list and explanation for each. Below is a quick list.
+### Arguments
+- `--input` - path to video file
+- `--model` - whisper model name - `tiny`, `tiny.en` (default), `base`, `base.en`, `small`, `small.en`, `medium`, `medium.sm`, `large`. View [official docs](https://github.com/openai/whisper#available-models-and-languages) for break down of model size and performance
+- `--language` - language code. Typically improves in transcription to set language instead of allowing Whisper to auto-detect.
 
-|  Size  | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
-|:------:|:----------:|:------------------:|:------------------:|:-------------:|:--------------:|
-|  tiny  |    39 M    |     `tiny.en`      |       `tiny`       |     ~1 GB     |      ~32x      |
-|  base  |    74 M    |     `base.en`      |       `base`       |     ~1 GB     |      ~16x      |
-| small  |   244 M    |     `small.en`     |      `small`       |     ~2 GB     |      ~6x       |
-| medium |   769 M    |    `medium.en`     |      `medium`      |     ~5 GB     |      ~2x       |
-| large  |   1550 M   |        N/A         |      `large`       |    ~10 GB     |       1x       |
-
-## Known Issues
+### Known Issues
 - `Error: Command "whisper" exited with code null` - this is likely caused by the container needing more allocated memory. Allocating at least 4 GB memory for the `small.en` usually resolved the issue but your mileage may vary.
+
+## Utility Commands
+There are a handful of utility commands that I find useful in the workflow to edit a video that are available in the Docker container.
+
+### `cut-video`
+Allows you to manually create a list of timestamps to cut the video.
+
+Usage:
+```shell
+docker run --rm -it -v $(pwd):/app video-swear-jar \
+  cut-video --timestamp timestamps.txt --video video.mkv
+```
+
+- `--timestamp` - path to file with timestamps. Each timestamp must be on a new line in `HH:MM:SS - HH:MM:SS` format
+- `--video` - path to video to cut the video
+- `--cut-video` - optional boolean to set to not cut video but only output cut file
+
+### `whisper`
+This is the `whisper` CLI if you need to further customize the command. Visit https://github.com/openai/whisper for full details
+
+Usage:
+```shell
+docker run --rm -it -v $(pwd):/app video-swear-jar \
+  whisper my-video.mp4 \
+    --model tiny.en \
+    --language en \
+    --output_format json \
+    --output_dir data
+```
+
+### ffmpeg
+Usage:
+```shell
+docker run --rm -it -v $(pwd):/app video-swear-jar \
+  ffmpeg -i input.mp4 output.avi
+```
 
 ## Roadmap
 - [x] Add Node to container to run everything within the container

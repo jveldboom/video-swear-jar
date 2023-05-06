@@ -4,7 +4,7 @@ const chalk = require('chalk')
 const utils = require('./utils')
 const video = require('./video')
 
-const argv = yargs.usage('Video Swear Jar')
+const argv = yargs.usage('clean')
   .options({
     input: {
       description: 'Input video filename',
