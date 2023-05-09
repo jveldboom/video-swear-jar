@@ -2,14 +2,14 @@ const fs = require('fs')
 const swearWords = require('./swear-words.json')
 const utils = require('./utils')
 
-const transcribe = async ({ inputFile, model = 'tiny.en', language = 'en' }) => {
+const transcribe = async ({ inputFile, model = 'tiny.en', language = 'en', outputDir = '.' }) => {
   const args = [
     inputFile,
     '--model', model,
     '--model_dir', '/app/.whisper',
     '--language', language,
     '--output_format', 'json',
-    '--output_dir', 'data',
+    '--output_dir', outputDir,
     '--fp16', 'False' // TODO: make CLI argument to use GPU
   ]
   const { stdout, stderr } = await utils.asyncSpawn('whisper', args)
@@ -67,7 +67,7 @@ const createCutFile = ({ transcript, paths }) => {
     ffmpegCuts.push(`outpoint ${start}`)
 
     inpoint = end
-    if (paths.cutWords) cutWords.push(`${inpoint}-${start}\t${segment.text.trim()}`)
+    if (paths.cutWords) cutWords.push(`${start}-${inpoint}\t${segment.text.trim()}`)
   }
 
   // write ending inpoint to bring in remaining video

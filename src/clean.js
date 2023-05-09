@@ -30,7 +30,7 @@ const run = async () => {
   try {
     console.log(chalk.cyan('[1 of 4] Starting video transcribe...'))
     const { model, language } = argv
-    await video.transcribe({ inputFile: paths.inputFile, model, language })
+    await video.transcribe({ inputFile: paths.inputFile, model, language, outputDir: paths.outputDir })
   } catch (err) {
     console.error(chalk.red(`Unable to transcribe ${paths.inputFile}`), err)
     throw err
