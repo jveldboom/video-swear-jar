@@ -1,0 +1,22 @@
+name: release
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: jveldboom/action-conventional-versioning@v1
+        id: version
+
+      - name: Build & tag container
+        run: |
+          make build tag-major \
+            IMAGE_VERSION=${{ steps.version.outputs.version }}
+            MAJOR_VERSION=${{ steps.version.outputs.major }}
+
