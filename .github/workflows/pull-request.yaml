@@ -1,0 +1,35 @@
+name: pull-request
+
+on:
+  pull_request:
+
+jobs:
+  test-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: cd src && npm install
+
+      - name: Lint
+        run: cd src && npm run lint
+
+      # - name: Unit test
+      #   run: yarn test
+
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build container
+        run: make build
+
+      - name: Transcribe example video
+        run: make test-clean
