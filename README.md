@@ -78,9 +78,9 @@ docker run --rm -it -v $(pwd):/data video-swear-jar \
 - [x] Run all processes within a Node or shell script to eliminate the need for passing variables in the Makefile
 - [x] Improve logging to let users know what steps are being ran
 - [x] Create CI jobs to run on PRs
+- [x] Create build jobs to version and publish container image
 - [ ] Allow user to define output directory
 - [ ] Clean up files after process is complete
-- [ ] Create build jobs to version and publish container image
 - [ ] Allow users to pass in a custom swear-words.json file (replace or add)
 
 ## Notes

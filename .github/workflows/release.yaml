@@ -2,7 +2,7 @@ name: release
 
 on:
   push:
-    branches: [ main, jveldboom/add-release ]
+    branches: [ main ]
 
 jobs:
   build-and-push:
@@ -21,11 +21,26 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build & tag container
+      - name: Build & Tag Container
         run: |
           make docker-build docker-tag \
             IMAGE_VERSION=${{ steps.version.outputs.version }} \
             MAJOR_VERSION=${{ steps.version.outputs.major-with-prefix }}
 
-      - name: Publish container image
+      - name: Publish Container Image
         run: make docker-push
+
+      - name: Update Docker Hub description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: jveldboom/video-swear-jar
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.version }}" \
+            --generate-notes \
+            --target "${{ github.sha }}"
