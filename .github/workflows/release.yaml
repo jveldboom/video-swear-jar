@@ -11,7 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: jveldboom/action-conventional-versioning@v1
+      - name: Get next version
+        uses: jveldboom/action-conventional-versioning@v1
         id: version
 
       - name: Login to Docker Hub
@@ -22,7 +23,7 @@ jobs:
 
       - name: Build & tag container
         run: |
-          make build tag-major \
+          make docker-build docker-tag \
             IMAGE_VERSION=${{ steps.version.outputs.version }}
             MAJOR_VERSION=${{ steps.version.outputs.major-with-prefix }}
 

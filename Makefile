@@ -4,11 +4,13 @@ IMAGE_VERSION := latest
 IMAGE_TAG := ${IMAGE_NAME}:${IMAGE_VERSION}
 DIR := $(shell pwd)
 
-build:
+# Docker
+docker-build:
 	docker build -t ${IMAGE_TAG} .
 
-tag-major:
-	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:${MAJOR_TAG}
+docker-tag:
+	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:${MAJOR_VERSION}
+	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:latest
 
 docker-push:
 	docker push --all-tags ${IMAGE_NAME}
