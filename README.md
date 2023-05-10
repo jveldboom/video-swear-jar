@@ -23,7 +23,7 @@ Introducing Video Swear Jar, your AI-powered solution for creating clean video c
 make build
 
 # create new video file with profanity removed
-docker run --rm -it -v $(pwd):/app video-swear-jar \
+docker run --rm -it -v $(pwd):/data video-swear-jar \
   clean --input video.mkv --model tiny.en --language en
 ```
 
@@ -43,7 +43,7 @@ Allows you to manually create a list of timestamps to cut the video.
 
 Usage:
 ```shell
-docker run --rm -it -v $(pwd):/app video-swear-jar \
+docker run --rm -it -v $(pwd):/data video-swear-jar \
   cut-video --timestamp timestamps.txt --video video.mkv
 ```
 
@@ -56,7 +56,7 @@ This is the `whisper` CLI if you need to further customize the command. Visit ht
 
 Usage:
 ```shell
-docker run --rm -it -v $(pwd):/app video-swear-jar \
+docker run --rm -it -v $(pwd):/data video-swear-jar \
   whisper my-video.mp4 \
     --model tiny.en \
     --language en \
@@ -67,7 +67,7 @@ docker run --rm -it -v $(pwd):/app video-swear-jar \
 ### ffmpeg
 Usage:
 ```shell
-docker run --rm -it -v $(pwd):/app video-swear-jar \
+docker run --rm -it -v $(pwd):/data video-swear-jar \
   ffmpeg -i input.mp4 output.avi
 ```
 

@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y curl
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
 # install software
-RUN apt-get install -y ffmpeg nodejs \
+RUN apt-get install -y ffmpeg nodejs=18.* \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -15,11 +15,12 @@ RUN pip install -U openai-whisper
 
 # add source files
 COPY src /app
-WORKDIR /app
 
 # install node dependencies
-RUN npm install --omit=dev
+RUN cd /app && npm install --omit=dev
 
-# add commands
+# add commands to global space
 RUN ln -s /app/clean.js /usr/bin/clean \
     && ln -s /app/cut-video.js /usr/bin/cut-video
+
+WORKDIR /data
