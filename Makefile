@@ -1,16 +1,26 @@
 # defaults
-DOCKER_TAG := video-swear-jar
+IMAGE_NAME := jveldboom/video-swear-jar
+IMAGE_VERSION := latest
+IMAGE_TAG := ${IMAGE_NAME}:${IMAGE_VERSION}
 DIR := $(shell pwd)
 
-build:
-	docker build -t ${DOCKER_TAG} .
+# Docker
+docker-build:
+	docker build -t ${IMAGE_TAG} .
+
+docker-tag:
+	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:${MAJOR_VERSION}
+	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:latest
+
+docker-push:
+	docker push --all-tags ${IMAGE_NAME}
 
 ## Testing
 test-clean:
 	docker run --rm \
 		-v ${DIR}/.whisper:/app/.whisper \
 		-v ${DIR}/examples:/data \
-		${DOCKER_TAG} \
+		${IMAGE_TAG} \
 		clean -i /data/curious-george.mp4 -m tiny.en -l en
 
 ## Targets Used for Development
@@ -18,7 +28,7 @@ whisper:
 	docker run -it --rm \
 		-v ${DIR}:/app \
 		-v ${DIR}/.whisper:/root/.cache/whisper \
-		${DOCKER_TAG} \
+		${IMAGE_TAG} \
 		whisper ${VIDEO_FILE} \
 			--model ${MODEL} \
 			--language ${LANG} \
@@ -28,4 +38,4 @@ whisper:
 bash:
 	docker run -it --rm \
 		-v ${DIR}/examples:/data \
-		${DOCKER_TAG} /bin/bash
+		${IMAGE_TAG} /bin/bash
