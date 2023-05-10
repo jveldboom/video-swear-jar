@@ -23,9 +23,8 @@ jobs:
 
       - name: Build & tag container
         run: |
-          echo "${{ toJSON(steps.version.outputs) }}"
           make docker-build docker-tag \
-            IMAGE_VERSION=${{ steps.version.outputs.version }}
+            IMAGE_VERSION=${{ steps.version.outputs.version }} \
             MAJOR_VERSION=${{ steps.version.outputs.major-with-prefix }}
 
       - name: Publish container image
