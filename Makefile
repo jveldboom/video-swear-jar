@@ -10,6 +10,9 @@ build:
 tag-major:
 	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:${MAJOR_TAG}
 
+docker-push:
+	docker push --all-tags ${IMAGE_NAME}
+
 ## Testing
 test-clean:
 	docker run --rm \
