@@ -20,7 +20,7 @@ Introducing Video Swear Jar, your AI-powered solution for creating clean video c
 ## Usage
 ```sh
 # build docker container
-make build
+make docker-build
 
 # create new video file with profanity removed
 docker run --rm -it -v $(pwd):/data video-swear-jar \
