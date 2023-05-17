@@ -27,7 +27,7 @@ docker run --rm -it \
 # recommended to mount a ".whisper" directory to locally cache large language models
 docker run --rm -it \
   -v $(pwd):/data \
-  -v $(pwd):/app/.whisper jveldboom/video-swear-jar:v1 \
+  -v $(pwd)/.whisper:/app/.whisper jveldboom/video-swear-jar:v1 \
   clean --input video.mkv --model tiny.en --language en
 ```
 
