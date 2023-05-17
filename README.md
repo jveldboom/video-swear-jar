@@ -19,11 +19,15 @@ Introducing Video Swear Jar, your AI-powered solution for creating clean video c
 
 ## Usage
 ```sh
-# build docker container
-make docker-build
-
 # create new video file with profanity removed
-docker run --rm -it -v $(pwd):/data video-swear-jar \
+docker run --rm -it \
+  -v $(pwd):/data jveldboom/video-swear-jar:v1 \
+  clean --input video.mkv --model tiny.en --language en
+
+# recommended to mount a ".whisper" directory to locally cache large language models
+docker run --rm -it \
+  -v $(pwd):/data \
+  -v $(pwd):/app/.whisper jveldboom/video-swear-jar:v1 \
   clean --input video.mkv --model tiny.en --language en
 ```
 
