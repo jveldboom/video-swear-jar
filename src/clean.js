@@ -24,7 +24,8 @@ const argv = yargs.usage('clean')
     },
     'output-dir': {
       description: 'Output directory to save cleaned video',
-      alias: 'o'
+      alias: 'o',
+      default: '.'
     }
   }).argv
 
@@ -34,7 +35,7 @@ const run = async () => {
   try {
     console.log(chalk.cyan('[1 of 4] Starting video transcribe...'))
     const { model, language } = argv
-    await video.transcribe({ inputFile: paths.inputFile, model, language, outputDir: argv.outputDir })
+    await video.transcribe({ inputFile: paths.inputFile, model, language, outputDir: argv['output-dir'] })
   } catch (err) {
     console.error(chalk.red(`Unable to transcribe ${paths.inputFile}`), err)
     throw err
