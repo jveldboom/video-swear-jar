@@ -35,7 +35,14 @@ whisper:
 			--output_format json \
 			--output_dir data
 
+node:
+	docker run -it --rm \
+		-v ${DIR}:/app \
+		-v ${DIR}/.whisper:/root/.cache/whisper \
+		${IMAGE_TAG} \
+		node /app/src/cut-video.js -t test -v test.mp4
+
 bash:
 	docker run -it --rm \
-		-v ${DIR}/examples:/data \
+		-v ${DIR}:/data \
 		${IMAGE_TAG} /bin/bash

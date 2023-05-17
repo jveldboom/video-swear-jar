@@ -79,7 +79,10 @@ docker run --rm -it -v $(pwd):/data video-swear-jar \
 - [x] Improve logging to let users know what steps are being ran
 - [x] Create CI jobs to run on PRs
 - [x] Create build jobs to version and publish container image
-- [ ] Allow user to define output directory
+- [x] Allow user to define output directory
+- [ ] Create logging abstraction for `info`, `warning`, `error`, `debug`, etc
+- [ ] Add debug flag to commands
+
 - [ ] Clean up files after process is complete
 - [ ] Allow users to pass in a custom swear-words.json file (replace or add)
 
