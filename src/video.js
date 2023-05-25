@@ -12,9 +12,7 @@ const transcribe = async ({ inputFile, model = 'tiny.en', language = 'en', outpu
     '--output_dir', outputDir,
     '--fp16', 'False' // TODO: make CLI argument to use GPU
   ]
-  const { stdout, stderr } = await utils.asyncSpawn('whisper', args)
-  console.log('stdout:', stdout)
-  console.error('stderr:', stderr)
+  await utils.asyncSpawn('whisper', args)
 }
 
 const cut = async ({ cutFile, outputFile }) => {
@@ -25,9 +23,7 @@ const cut = async ({ cutFile, outputFile }) => {
     '-c', 'copy',
     outputFile
   ]
-  const { stdout, stderr } = await utils.asyncSpawn('ffmpeg', args)
-  if (stdout) console.log('stdout:', stdout)
-  if (stderr) console.error('stderr:', stderr)
+  await utils.asyncSpawn('ffmpeg', args)
 }
 
 // get and format transcript in known format

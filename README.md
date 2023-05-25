@@ -84,17 +84,18 @@ docker run --rm -it -v $(pwd):/data video-swear-jar \
 - [x] Create CI jobs to run on PRs
 - [x] Create build jobs to version and publish container image
 - [x] Allow user to define output directory
-- [ ] Create logging abstraction for `info`, `warning`, `error`, `debug`, etc
+- [x] Create logging abstraction for `info`, `warning`, `error`, `debug`, etc
+- [ ] Add unit tests
 - [ ] Add debug flag to commands
-
 - [ ] Clean up files after process is complete
 - [ ] Allow users to pass in a custom swear-words.json file (replace or add)
 
 ## Notes
 ### Alternatives
-- [AWS Transcribe](https://aws.amazon.com/pm/transcribe/)
-- [OpenAI Whisper API](https://openai.com/blog/introducing-chatgpt-and-whisper-apis)
+Below is a small list of possible alternatives to vide-swear-jar.
+- [AWS Transcribe](https://aws.amazon.com/pm/transcribe/) - in my testing this provides very good results but is relatively expensive for small projects plus it requires uploading your video files to the cloud.
+- [OpenAI Whisper API](https://openai.com/blog/introducing-chatgpt-and-whisper-apis) - requires uploading video to cloud
 
 ### Tools
+Small list of tool I use in my workflow
 - [MakeMKV](https://www.makemkv.com/) - "convert videos (DVD/Blu-ray) that you own into free and patents-unencumbered format that can be played everywhere"
-- [Handbrake](https://handbrake.fr/) - "open-source tool, built by volunteers, for converting video from nearly any format to a selection of modern, widely supported codecs"
