@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const yargs = require('yargs')
-const chalk = require('chalk')
 const fs = require('fs')
+const log = require('./log')
 const utils = require('./utils')
 const video = require('./video')
 
@@ -29,12 +29,12 @@ const paths = utils.getFilePaths(argv.video)
 
 const run = async () => {
   if (!fs.existsSync(argv.timestamps)) {
-    console.error(chalk.red(`The timestamps file ("${argv.timestamps}") does not exist`))
+    log.error(`The timestamps file ("${argv.timestamps}") does not exist`)
     return
   }
 
   if (!fs.existsSync(argv.video)) {
-    console.error(chalk.red(`The video file ("${argv.video}") does not exist`))
+    log.error(`The video file ("${argv.video}") does not exist`)
     return
   }
 
@@ -45,7 +45,7 @@ const run = async () => {
   for (const line of content.split('\n')) {
     const times = line.split('-')
     if (times.length !== 2) {
-      console.log(chalk.yellow(`Warning: skipping invalid line found: ${line}`))
+      log.warn(`Warning: skipping invalid line found: ${line}`)
       continue
     }
 
@@ -53,7 +53,7 @@ const run = async () => {
     const end = times[1].trim().split(':')
 
     if (start.length !== 3 || end.length !== 3) {
-      console.log(chalk.yellow(`Warning: skipping invalid time found on line: ${line}`))
+      log.warn(`Warning: skipping invalid time found on line: ${line}`)
       continue
     }
 
@@ -72,14 +72,14 @@ const run = async () => {
   })
 
   try {
-    console.log(chalk.cyan('Cutting video and saving new video...'))
+    log.info('Cutting video and saving new video...')
     await video.cut({ cutFile: paths.cut, outputFile: paths.outputVideo })
   } catch (err) {
-    console.error(chalk.red(`Unable to cut video "${paths.inputFile}"`), err)
+    log.error(`Unable to cut video "${paths.inputFile}"`, err)
     throw err
   }
 
-  console.log(chalk.green(`Video successfully cut ${paths.outputVideo}`))
+  log.success(`Video successfully cut ${paths.outputVideo}`)
 }
 
 run()

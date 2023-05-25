@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const yargs = require('yargs')
-const chalk = require('chalk')
+const log = require('./log')
 const utils = require('./utils')
 const video = require('./video')
 
@@ -33,40 +33,40 @@ const paths = utils.getFilePaths(argv.input)
 
 const run = async () => {
   try {
-    console.log(chalk.cyan('[1 of 4] Starting video transcribe...'))
+    log.info('[1 of 4] Starting video transcribe...')
     const { model, language } = argv
     await video.transcribe({ inputFile: paths.inputFile, model, language, outputDir: argv['output-dir'] })
   } catch (err) {
-    console.error(chalk.red(`Unable to transcribe ${paths.inputFile}`), err)
+    log.error(`Unable to transcribe ${paths.inputFile}`, err)
     throw err
   }
 
   // TODO: validate expected files exist before continuing
-  console.log(chalk.cyan('[2 of 4] Checking transcript for swear words...'))
+  log.info('[2 of 4] Checking transcript for swear words...')
   const transcript = video.getTranscriptSwearWords(paths.transcript)
   if (transcript.length === 0) {
-    console.log(chalk.green(`No swear words found in ${paths.inputFile} - nothing else to do`))
+    log.success(`No swear words found in ${paths.inputFile} - nothing else to do`)
     return
   }
 
   try {
-    console.log(chalk.cyan('[3 of 4] Creating video cut list...'))
+    log.info('[3 of 4] Creating video cut list...')
     video.createCutFile({ transcript, paths })
   } catch (err) {
-    console.error(chalk.red(`Unable to create video cut file ${paths.cutVideo}`), err)
+    log.error(`Unable to create video cut file ${paths.cutVideo}`, err)
     throw err
   }
 
   try {
-    console.log(chalk.cyan('[4 of 4] Cutting video and saving new video...'))
+    log.info('[4 of 4] Cutting video and saving new video...')
     await video.cut({ cutFile: paths.cut, outputFile: paths.outputVideo })
   } catch (err) {
-    console.error(chalk.red(`Unable to cut video ${paths.inputFile}`), err)
+    log.error(`Unable to cut video ${paths.inputFile}`, err)
     throw err
   }
 
-  console.log(chalk.green('Video successfully cleaned!'))
-  console.log(`
+  log.success('Video successfully cleaned!')
+  log.notice(`
   Outputs:
     Clean video: ${paths.outputVideo}
     Words Cut from Video: ${paths.cutWords}

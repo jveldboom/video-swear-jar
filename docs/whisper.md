@@ -30,3 +30,6 @@ whisper [-h]
     [--threads THREADS]
     audio [audio ...]
 ```
+
+Argument Notes:
+- `--word_timestamps` creates a timestamps for each word. For example, `--output_format` json will include a "words" key in each segment containing a list of the individual words and their timestamps for that segment.
