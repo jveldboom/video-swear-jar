@@ -17,7 +17,7 @@ const info = (message, optionalMessage = '') => {
 }
 
 const debug = (message, optionalMessage = '') => {
-  if (process.env.DEBUG) console.log(message, optionalMessage)
+  if (process.env.DEBUG === true) console.log(`[DEBUG] ${message}`, optionalMessage)
 }
 
 const notice = (message, optionalMessage = '') => {

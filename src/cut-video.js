@@ -10,34 +10,32 @@ const argv = yargs.usage('cut-video')
     timestamps: {
       description: 'Timestamps file',
       demandOption: true,
+      type: 'string',
       alias: 't'
     },
     video: {
       description: 'Video file to cut',
       demandOption: true,
+      type: 'string',
       alias: 'v'
     },
-    'cut-video': {
-      description: 'Boolean to cut video',
-      boolean: true,
-      default: true,
-      alias: 'c'
+    debug: {
+      description: 'Run in debug mode for verbose output',
+      default: false
+    }
+  }).check((argv) => {
+    if (!fs.existsSync(argv.timestamps)) {
+      throw new Error(`Error: the timestamps file "${argv.timestamps}" does not exist`)
+    }
+    if (!fs.existsSync(argv.video)) {
+      throw new Error(`Error: the video file "${argv.video}" does not exist`)
     }
   }).argv
 
+process.env.DEBUG = argv.debug
 const paths = utils.getFilePaths(argv.video)
 
 const run = async () => {
-  if (!fs.existsSync(argv.timestamps)) {
-    log.error(`The timestamps file ("${argv.timestamps}") does not exist`)
-    return
-  }
-
-  if (!fs.existsSync(argv.video)) {
-    log.error(`The video file ("${argv.video}") does not exist`)
-    return
-  }
-
   const content = fs.readFileSync(argv.timestamps).toString()
 
   const cutList = []

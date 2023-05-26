@@ -26,9 +26,15 @@ const argv = yargs.usage('clean')
       description: 'Output directory to save cleaned video',
       alias: 'o',
       default: '.'
+    },
+    debug: {
+      description: 'Run in debug mode for verbose output',
+      default: false,
+      type: 'boolean'
     }
   }).argv
 
+process.env.DEBUG = argv.debug
 const paths = utils.getFilePaths(argv.input)
 
 const run = async () => {
