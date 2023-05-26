@@ -1,9 +1,10 @@
 const path = require('path')
 const { spawn } = require('child_process')
+const log = require('./log')
 
 const getFilePaths = (inputFile) => {
   const paths = path.parse(inputFile)
-  return {
+  const filePaths = {
     inputFile,
     transcript: `${paths.name}.json`, // automatically output by whisper in <video-file>.json
     cut: `${paths.name}-cut.txt`,
@@ -11,10 +12,14 @@ const getFilePaths = (inputFile) => {
     cutWords: `${paths.name}-cut-words.txt`,
     outputVideo: `${paths.name}-output${paths.ext}`
   }
+
+  log.debug(`file paths: ${JSON.stringify(filePaths)}`)
+  return filePaths
 }
 
 const asyncSpawn = async (command, args = []) => {
   return new Promise((resolve, reject) => {
+    log.debug(`running command: ${command} ${args.join(' ')}`)
     const process = spawn(command, args)
 
     let stdout = ''
