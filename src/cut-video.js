@@ -30,6 +30,7 @@ const argv = yargs.usage('cut-video')
     if (!fs.existsSync(argv.video)) {
       throw new Error(`Error: the video file "${argv.video}" does not exist`)
     }
+    return true
   }).argv
 
 process.env.DEBUG = argv.debug
