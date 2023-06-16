@@ -6,7 +6,10 @@ DIR := $(shell pwd)
 
 # Docker
 docker-build:
-	docker build -t ${IMAGE_TAG} .
+	docker buildx create --name video-swear-jar --bootstrap --use
+	docker buildx build \
+		--platform linux/arm64/v8,linux/amd64 \
+		-t ${IMAGE_TAG} .
 
 docker-tag:
 	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:${MAJOR_VERSION}
