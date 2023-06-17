@@ -5,8 +5,11 @@ IMAGE_TAG := ${IMAGE_NAME}:${IMAGE_VERSION}
 DIR := $(shell pwd)
 
 # Docker
-docker-build:
-	docker buildx create --name video-swear-jar --bootstrap --use
+docker-build: # only builds image for current system arch
+	docker build -t ${IMAGE_TAG} .
+
+docker-buildx:
+	docker buildx create --use
 	docker buildx build \
 		--platform linux/arm64/v8,linux/amd64 \
 		-t ${IMAGE_TAG} .

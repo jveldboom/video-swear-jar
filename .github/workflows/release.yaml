@@ -26,7 +26,7 @@ jobs:
 
       - name: Build & Tag Container
         run: |
-          make docker-build docker-tag \
+          make docker-buildx docker-tag \
             IMAGE_VERSION=${{ steps.version.outputs.version }} \
             MAJOR_VERSION=${{ steps.version.outputs.major-with-prefix }}
 
