@@ -8,18 +8,12 @@ DIR := $(shell pwd)
 docker-build: # only builds image for current system arch
 	docker build -t ${IMAGE_TAG} .
 
-docker-buildx:
-	docker buildx create --use
-	docker buildx build \
-		--platform linux/arm64/v8,linux/amd64 \
-		-t ${IMAGE_TAG} .
-
-docker-tag:
-	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:${MAJOR_VERSION}
-	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:latest
-
 docker-push:
 	docker push --all-tags ${IMAGE_NAME}
+
+docker-image-name:
+	@printf ${IMAGE_NAME}
+.PHONY: image-name
 
 ## Testing
 test-clean:
