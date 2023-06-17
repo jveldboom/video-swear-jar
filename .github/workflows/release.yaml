@@ -30,26 +30,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build & Tag Container
+      - name: Build & Push Container
         run: |
           make docker-buildx \
             IMAGE_VERSION=${{ steps.version.outputs.version }} \
             MAJOR_VERSION=${{ steps.version.outputs.major-with-prefix }}
 
-      # - name: Publish Container Image
-      #   run: make docker-push
+      - name: Update Docker Hub description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: jveldboom/video-swear-jar
 
-      # - name: Update Docker Hub description
-      #   uses: peter-evans/dockerhub-description@v3
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
-      #     repository: jveldboom/video-swear-jar
-
-      # - name: Create GitHub Release
-      #   env:
-      #     GH_TOKEN: ${{ github.token }}
-      #   run: |
-      #     gh release create "${{ steps.version.outputs.version }}" \
-      #       --generate-notes \
-      #       --target "${{ github.sha }}"
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.version }}" \
+            --generate-notes \
+            --target "${{ github.sha }}"

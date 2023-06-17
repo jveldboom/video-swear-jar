@@ -11,15 +11,11 @@ docker-build: # only builds image for current system arch
 docker-buildx:
 	docker buildx create --use
 	docker buildx build \
-		--platform linux/arm64/v8 \
+		--platform linux/arm64/v8,linux/amd64 \
 		--push \
 		-t ${IMAGE_TAG} \
 		-t ${IMAGE_NAME}:${MAJOR_VERSION} \
 		.
-
-docker-tag:
-	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:${MAJOR_VERSION}
-	docker tag ${IMAGE_TAG} ${IMAGE_NAME}:latest
 
 docker-push:
 	docker push --all-tags ${IMAGE_NAME}
