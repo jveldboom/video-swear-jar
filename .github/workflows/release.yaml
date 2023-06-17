@@ -32,6 +32,9 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY_IMAGE }}
+          tags: |
+            ${{ env.REGISTRY_IMAGE }}:${{ steps.version.outputs.version }}
+            ${{ env.REGISTRY_IMAGE }}:${{ steps.version.outputs.major-with-prefix }}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
