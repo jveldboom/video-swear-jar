@@ -12,6 +12,7 @@ docker-buildx:
 	docker buildx create --use
 	docker buildx build \
 		--platform linux/arm64/v8 \
+		--push \
 		-t ${IMAGE_TAG} \
 		-t ${IMAGE_NAME}:${MAJOR_VERSION} \
 		.

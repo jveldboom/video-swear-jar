@@ -32,12 +32,12 @@ jobs:
 
       - name: Build & Tag Container
         run: |
-          make docker-buildx docker-tag \
+          make docker-buildx \
             IMAGE_VERSION=${{ steps.version.outputs.version }} \
             MAJOR_VERSION=${{ steps.version.outputs.major-with-prefix }}
 
-      - name: Publish Container Image
-        run: make docker-push
+      # - name: Publish Container Image
+      #   run: make docker-push
 
       # - name: Update Docker Hub description
       #   uses: peter-evans/dockerhub-description@v3
