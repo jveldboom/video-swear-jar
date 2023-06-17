@@ -11,7 +11,7 @@ env:
   REGISTRY_IMAGE: jveldboom/video-swear-jar
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
