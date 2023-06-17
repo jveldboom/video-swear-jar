@@ -11,7 +11,7 @@ docker-build: # only builds image for current system arch
 docker-buildx:
 	docker buildx create --use
 	docker buildx build \
-		--platform linux/arm64/v8,linux/amd64 \
+		--platform linux/arm64/v8 \
 		-t ${IMAGE_TAG} \
 		-t ${IMAGE_NAME}:${MAJOR_VERSION} \
 		.
