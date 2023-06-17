@@ -2,7 +2,7 @@ name: release
 
 on:
   push:
-    branches: [ main, jveldboom/multi-arch ]
+    branches: [ main, jveldboom/multi-arch-testing ]
 
 permissions:
   contents: write
