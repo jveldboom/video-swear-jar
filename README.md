@@ -85,10 +85,11 @@ docker run --rm -it -v $(pwd):/data video-swear-jar \
 - [x] Create build jobs to version and publish container image
 - [x] Allow user to define output directory
 - [x] Create logging abstraction for `info`, `warning`, `error`, `debug`, etc
-- [ ] Add unit tests
 - [x] Add debug flag to commands
+- [ ] Add unit tests
 - [ ] Clean up files after process is complete
 - [ ] Allow users to pass in a custom swear-words.json file (replace or add)
+- [ ] Reduce container image size -- ideally less than 1GB
 
 ## Notes
 ### Alternatives
