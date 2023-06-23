@@ -89,7 +89,7 @@ docker run --rm -it -v $(pwd):/data video-swear-jar \
 - [ ] Add unit tests
 - [ ] Clean up files after process is complete
 - [ ] Allow users to pass in a custom swear-words.json file (replace or add)
-- [ ] Reduce container image size -- ideally less than 1GB
+- [ ] Reduce linux/amd64 container image size -- ideally less than 1GB
 
 ## Notes
 ### Alternatives
