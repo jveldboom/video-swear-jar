@@ -55,15 +55,15 @@ const createCutFile = ({ transcript, paths }) => {
   let inpoint = 0
 
   for (const segment of transcript) {
-    const start = segment.start
-    const end = segment.end
+    const start = Math.floor(segment.start)
+    const end = Math.ceil(segment.end)
 
     ffmpegCuts.push(`file '${paths.cutVideo}'`)
     ffmpegCuts.push(`inpoint ${inpoint}`)
     ffmpegCuts.push(`outpoint ${start}`)
 
     inpoint = end
-    if (paths.cutWords) cutWords.push(`${start}-${inpoint}\t${segment.text.trim()}`)
+    if (paths.cutWords) cutWords.push(`${formatTime(start)} - ${formatTime(inpoint)}\t${segment.text.trim()}`)
   }
 
   // write ending inpoint to bring in remaining video
@@ -72,6 +72,18 @@ const createCutFile = ({ transcript, paths }) => {
 
   fs.writeFileSync(paths.cut, ffmpegCuts.join('\n'))
   if (paths.cutWords) fs.writeFileSync(paths.cutWords, cutWords.join('\n'))
+}
+
+const formatTime = (seconds) => {
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  const remainingSeconds = seconds % 60
+
+  const formattedHours = String(hours).padStart(2, '0')
+  const formattedMinutes = String(minutes).padStart(2, '0')
+  const formattedSeconds = String(remainingSeconds).padStart(2, '0')
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
 }
 
 module.exports = {
