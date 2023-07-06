@@ -2,17 +2,27 @@ const fs = require('fs')
 const swearWords = require('./swear-words.json')
 const utils = require('./utils')
 
-const transcribe = async ({ inputFile, model = 'tiny.en', language = 'en', outputDir = '.' }) => {
+const transcribe = async ({ engine = 'fast-whisper', inputFile, model = 'tiny.en', language = 'en', outputDir = '.' }) => {
   const args = [
     inputFile,
     '--model', model,
     '--model_dir', '/app/.whisper',
     '--language', language,
     '--output_format', 'json',
-    '--output_dir', outputDir,
-    '--fp16', 'False' // TODO: make CLI argument to use GPU
+    '--output_dir', outputDir
   ]
-  await utils.asyncSpawn('whisper', args)
+
+  // engine specific args
+  switch (engine) {
+    case 'whisper':
+      args.push('--fp16', 'False')
+      break
+    case 'fast-whisper':
+      args.push('--compute_type', 'int8')
+      break
+  }
+
+  await utils.asyncSpawn(engine, args)
 }
 
 const cut = async ({ cutFile, outputFile }) => {

@@ -32,7 +32,7 @@ test-clean:
 whisper:
 	docker run -it --rm \
 		-v ${DIR}:/app \
-		-v ${DIR}/.whisper:/root/.cache/whisper \
+		-v ${DIR}/.whisper:/app/.whisper \
 		${IMAGE_TAG} \
 		whisper ${VIDEO_FILE} \
 			--model ${MODEL} \
@@ -43,11 +43,12 @@ whisper:
 node:
 	docker run -it --rm \
 		-v ${DIR}:/app \
-		-v ${DIR}/.whisper:/root/.cache/whisper \
+		-v ${DIR}/.whisper:/app/.whisper \
 		${IMAGE_TAG} \
 		node /app/src/cut-video.js -t test -v test.mp4
 
 bash:
 	docker run -it --rm \
 		-v ${DIR}:/data \
+		-v ${DIR}/.whisper:/app/.whisper \
 		${IMAGE_TAG} /bin/bash

@@ -11,7 +11,7 @@ RUN apt-get install -y ffmpeg nodejs=18.* \
     && rm -rf /var/lib/apt/lists/*
 
 # install python dependencies
-RUN pip install -U openai-whisper
+RUN pip install -U openai-whisper whisper-ctranslate2
 
 # add source files
 COPY src /app
