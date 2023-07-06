@@ -4,18 +4,24 @@ const log = require('./log')
 const utils = require('./utils')
 const video = require('./video')
 
-const argv = yargs.usage('clean')
+const argv = yargs.usage('clean-fast')
   .options({
     input: {
       description: 'Input video filename',
       demandOption: true,
       alias: 'i'
     },
+    engine: {
+      description: 'Transcription engine',
+      alias: 'e',
+      default: 'whisper-ctranslate2',
+      choices: ['whisper', 'whisper-ctranslate2']
+    },
     model: {
       description: 'Whisper model name',
       alias: 'm',
       default: 'tiny.en',
-      choices: ['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small']
+      choices: ['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large']
     },
     language: {
       description: 'Video file language',
@@ -41,7 +47,7 @@ const run = async () => {
   try {
     log.info('[1 of 4] Starting video transcribe...')
     const { model, language } = argv
-    await video.transcribe({ inputFile: paths.inputFile, model, language, outputDir: argv['output-dir'] })
+    await video.transcribe({ engine: argv.engine, inputFile: paths.inputFile, model, language, outputDir: argv['output-dir'] })
   } catch (err) {
     log.error(`Unable to transcribe ${paths.inputFile}`, err)
     throw err
