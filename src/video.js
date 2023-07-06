@@ -2,7 +2,7 @@ const fs = require('fs')
 const swearWords = require('./swear-words.json')
 const utils = require('./utils')
 
-const transcribe = async ({ engine = 'fast-whisper', inputFile, model = 'tiny.en', language = 'en', outputDir = '.' }) => {
+const transcribe = async ({ engine = 'whisper-ctranslate2', inputFile, model = 'tiny.en', language = 'en', outputDir = '.' }) => {
   const args = [
     inputFile,
     '--model', model,
@@ -17,7 +17,7 @@ const transcribe = async ({ engine = 'fast-whisper', inputFile, model = 'tiny.en
     case 'whisper':
       args.push('--fp16', 'False')
       break
-    case 'fast-whisper':
+    case 'whisper-ctranslate2':
       args.push('--compute_type', 'int8')
       break
   }

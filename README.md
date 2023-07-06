@@ -35,7 +35,7 @@ docker run --rm -it \
 - `--input` - path to video file
 - `--model` - whisper model name - `tiny`, `tiny.en` (default), `base`, `base.en`, `small`, `small.en`, `medium`, `medium.sm`, `large`. View [official docs](https://github.com/openai/whisper#available-models-and-languages) for break down of model size and performance
 - `--language` - language code. Typically improves in transcription to set language instead of allowing Whisper to auto-detect.
-- `--engine` - transcription engine `fast-whisper` (default) or `whisper`. `whisper` is likely to be removed in the near future if/when `fast-whisper` proves to be just as good but 4x faster
+- `--engine` - transcription engine `whisper-ctranslate2` (default) or `whisper`. `whisper` is likely to be removed in the near future if/when `whisper-ctranslate2` proves to be just as good but 4x faster
 
 ### Known Issues
 - `Error: Command "whisper" exited with code null` - this is likely caused by the container needing more allocated memory. Allocating at least 4 GB memory for the `small.en` usually resolved the issue but your mileage may vary.

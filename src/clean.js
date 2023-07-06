@@ -14,8 +14,8 @@ const argv = yargs.usage('clean-fast')
     engine: {
       description: 'Transcription engine',
       alias: 'e',
-      default: 'fast-whisper',
-      choices: ['whisper', 'fast-whisper']
+      default: 'whisper-ctranslate2',
+      choices: ['whisper', 'whisper-ctranslate2']
     },
     model: {
       description: 'Whisper model name',
