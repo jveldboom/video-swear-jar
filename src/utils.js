@@ -39,7 +39,7 @@ const asyncSpawn = async (command, args = []) => {
       if (code === 0) {
         resolve({ stdout, stderr })
       } else {
-        const error = new Error(`Command "${command}" exited with code ${code}`)
+        const error = new Error(`Command "${command} ${args.join(' ')}" exited with code ${code}`)
         error.code = code
         error.stdout = stdout
         error.stderr = stderr

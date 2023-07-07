@@ -75,7 +75,7 @@ const run = async () => {
     await video.cut({ cutFile: paths.cut, outputFile: paths.outputVideo })
   } catch (err) {
     log.error(`Unable to cut video "${paths.inputFile}"`, err)
-    throw err
+    return err
   }
 
   log.success(`Video successfully cut ${paths.outputVideo}`)
