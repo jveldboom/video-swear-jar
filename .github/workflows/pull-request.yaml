@@ -20,8 +20,8 @@ jobs:
       - name: Lint
         run: cd src && npm run lint
 
-      # - name: Unit test
-      #   run: yarn test
+      - name: Unit test
+        run: cd src && npm test
 
   test-build:
     runs-on: ubuntu-latest

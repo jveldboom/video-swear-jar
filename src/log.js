@@ -17,11 +17,11 @@ const info = (message, optionalMessage = '') => {
 }
 
 const debug = (message, optionalMessage = '') => {
-  if (process.env.DEBUG === true) console.log(`[DEBUG] ${message}`, optionalMessage)
+  if (process.env.DEBUG === 'true') console.log(`[DEBUG] ${message}`, optionalMessage)
 }
 
 const notice = (message, optionalMessage = '') => {
-  console.log(message, optionalMessage)
+  console.log(chalk.white(message), optionalMessage)
 }
 
 module.exports = {
