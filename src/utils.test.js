@@ -35,8 +35,9 @@ describe('utils', () => {
       try {
         await utils.asyncSpawn('ls', ['-z'])
       } catch (err) {
-        expect(err.message).toBe('Command "ls -z" exited with code 1')
-        expect(err.code).toBe(1)
+        // error code differs on mac (1) & linux (2)
+        expect(err.message).toMatch(/^Command "ls -z" exited with code/)
+        expect(err.code).toBeGreaterThan(0)
         expect(err.stderr.length).toBeGreaterThan(10)
       }
     })
