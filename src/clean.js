@@ -50,7 +50,7 @@ const run = async () => {
     await video.transcribe({ engine: argv.engine, inputFile: paths.inputFile, model, language, outputDir: argv['output-dir'] })
   } catch (err) {
     log.error(`Unable to transcribe ${paths.inputFile}`, err)
-    throw err
+    return err
   }
 
   // TODO: validate expected files exist before continuing
@@ -66,7 +66,7 @@ const run = async () => {
     video.createCutFile({ transcript, paths })
   } catch (err) {
     log.error(`Unable to create video cut file ${paths.cutVideo}`, err)
-    throw err
+    return err
   }
 
   try {
@@ -74,7 +74,7 @@ const run = async () => {
     await video.cut({ cutFile: paths.cut, outputFile: paths.outputVideo })
   } catch (err) {
     log.error(`Unable to cut video ${paths.inputFile}`, err)
-    throw err
+    return err
   }
 
   log.success('Video successfully cleaned!')
