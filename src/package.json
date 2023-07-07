@@ -4,7 +4,9 @@
   "description": "",
   "main": "run.js",
   "scripts": {
-    "lint": "standard ."
+    "lint": "standard .",
+    "test": "NODE_ENV=test jest --coverage --silent",
+    "test:watch": "NODE_ENV=test jest --coverage --watch --silent"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +15,9 @@
     "standard": "^17.0.0"
   },
   "dependencies": {
+    "@types/jest": "^29.5.2",
     "chalk": "^4.1.2",
+    "jest": "^29.6.1",
     "yargs": "^17.7.2"
   }
 }
