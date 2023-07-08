@@ -3,7 +3,6 @@ const utils = require('./utils')
 const fs = require('fs')
 
 const video = require('./video')
-const exp = require('constants')
 
 jest.spyOn(utils, 'asyncSpawn')
 jest.spyOn(fs, 'writeFileSync')
