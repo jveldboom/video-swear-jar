@@ -102,5 +102,6 @@ module.exports = {
   getTranscript,
   getTranscriptSwearWords,
   containsSwearWords,
-  createCutFile
+  createCutFile,
+  formatTime
 }
