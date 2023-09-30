@@ -56,6 +56,17 @@ docker run --rm -it -v $(pwd):/data video-swear-jar:v1 \
 - `--video` - path to video to cut the video
 - `--cut-video` - optional boolean to set to not cut video but only output cut file
 
+### `read-subtitles`
+Reads a subtitle file and prints out the lines with swear words. Useful if you want to cut the video manually.
+
+Usage:
+```shell
+docker run --rm -it -v $(pwd):/data video-swear-jar:v1 \
+  read-subtitles --subtitles path/to/subtitle.srt
+```
+
+- `--subtitles` - path to file with timestamps
+
 ### `whisper`
 This is the `whisper` CLI if you need to further customize the command. Visit https://github.com/openai/whisper for full details
 
