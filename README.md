@@ -48,7 +48,7 @@ Allows you to manually create a list of timestamps to cut the video.
 
 Usage:
 ```shell
-docker run --rm -it -v $(pwd):/data video-swear-jar:v1 \
+docker run --rm -it -v $(pwd):/data jveldboom/video-swear-jar:v1 \
   cut-video --timestamp timestamps.txt --video video.mkv
 ```
 
@@ -61,7 +61,7 @@ Reads a subtitle file and prints out the lines with swear words. Useful if you w
 
 Usage:
 ```shell
-docker run --rm -it -v $(pwd):/data video-swear-jar:v1 \
+docker run --rm -it -v $(pwd):/data jveldboom/video-swear-jar:v1 \
   read-subtitles --subtitles path/to/subtitle.srt
 ```
 
@@ -72,7 +72,7 @@ This is the `whisper` CLI if you need to further customize the command. Visit ht
 
 Usage:
 ```shell
-docker run --rm -it -v $(pwd):/data video-swear-jar:v1 \
+docker run --rm -it -v $(pwd):/data jveldboom/video-swear-jar:v1 \
   whisper my-video.mp4 \
     --model tiny.en \
     --language en \
@@ -83,7 +83,7 @@ docker run --rm -it -v $(pwd):/data video-swear-jar:v1 \
 ### ffmpeg
 Usage:
 ```shell
-docker run --rm -it -v $(pwd):/data video-swear-jar:v1 \
+docker run --rm -it -v $(pwd):/data jveldboom/video-swear-jar:v1 \
   ffmpeg -i input.mp4 output.avi
 ```
 
