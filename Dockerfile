@@ -21,6 +21,7 @@ RUN cd /app && npm install --omit=dev
 
 # add commands to global space
 RUN ln -s /app/clean.js /usr/bin/clean \
-    && ln -s /app/cut-video.js /usr/bin/cut-video
+    && ln -s /app/cut-video.js /usr/bin/cut-video \
+    && ln -s /app/read-subtitles.js /usr/bin/read-subtitles
 
 WORKDIR /data
