@@ -53,8 +53,9 @@ describe('video', () => {
       utils.asyncSpawn.mockImplementation()
       video.cut({ cutFile: 'timestamps.txt', outputFile: 'output.mp4' })
       expect(utils.asyncSpawn).toBeCalledWith('ffmpeg', [
-        '-loglevel', 'panic',
+        '-loglevel', 'error',
         '-f', 'concat',
+        '-safe', '0',
         '-i', 'timestamps.txt',
         '-c', 'copy',
         'output.mp4'
