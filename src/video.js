@@ -27,8 +27,9 @@ const transcribe = async ({ engine = 'whisper-ctranslate2', inputFile, model = '
 
 const cut = async ({ cutFile, outputFile }) => {
   const args = [
-    '-loglevel', 'panic',
+    '-loglevel', 'error',
     '-f', 'concat',
+    '-safe', '0', // allows "unsafe" filenames
     '-i', cutFile,
     '-c', 'copy',
     outputFile
