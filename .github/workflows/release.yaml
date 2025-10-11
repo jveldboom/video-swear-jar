@@ -14,6 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Building the container needs a lot of disk space -- this helps free up around 25GB in ~8 minutes
       - name: Free Disk Space
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
