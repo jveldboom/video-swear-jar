@@ -82,7 +82,9 @@ Trade-off: accurate cut = full software re-encode (slow for feature films, gener
 
 ## Recommended plan
 
-**Phase 1 — Correctness (small PR)**
+**Phase 1 — Distribution (npm/npx)** — see "Distribution" section below. Everything else builds on this; ship the package skeleton first (`bin`/`files`/`engines`, `doctor`, preflight, models cache, npm publish workflow).
+
+**Phase 2 — Correctness (small PR)**
 - `await video.mute`, `.catch`, `process.exitCode = 1`
 - Fix `createCutFile` regression / update test + caller
 - Join `outputDir` into all paths; verify transcript exists
@@ -90,19 +92,17 @@ Trade-off: accurate cut = full software re-encode (slow for feature films, gener
 - Remove dead code/typos, fix summary; drop `monkey`; gitignore example video
 - Add `mute()` tests and await existing async tests
 
-**Phase 2 — Quality**
+**Phase 3 — Quality**
 - Word-level timestamps, padding, interval merge, single-expression/`-filter_script` filter
 - Default model `base.en`/`small.en`
 
-**Phase 3 — UX**
+**Phase 4 — UX**
 - `--dry-run`, words report, `--skip-transcribe`, `--words`/`--exclude-words`, `--mode`, yargs cleanup, README/Makefile sync
 
-**Phase 4 — Infra**
+**Phase 5 — Infra**
 - Dockerfile modernization (Node 22 LTS, Python ≥3.11, pinned deps, `npm ci`, non-root)
 
-**Phase 4b — Distribution (npm/npx)** — see "Distribution" section below
-
-**Phase 5 — Optional cut mode**
+**Phase 6 — Optional cut mode**
 - Port segment math + libx264/libx265 accurate cut behind `--mode cut`; opt-in tone-map
 
 ## Distribution: npm / npx instead of Docker (decided direction)
@@ -118,7 +118,7 @@ Decisions:
 - **`doctor` command:** runs the same checks on demand, prints a readable report (versions, paths, chosen engine, optional-feature status), exits non-zero if a required item is missing. No TTY: never prompt.
 - **Engine abstraction:** add `whisper-cpp` behind `--engine`; verify its word-level timestamp accuracy versus whisper-ctranslate2 before making it the default.
 - **Publishing:** switch `.github/workflows/release.yaml` to npm publish with provenance (verify what the workflow currently does). Optional later: Homebrew tap (depends on `ffmpeg` and `whisper-cpp`), winget/scoop, Node SEA/Bun single-file build.
-- **Sequencing:** do after Phase 1 (correctness) so known bugs aren't published; combine engine abstraction with the word-level timestamp work (same transcript-parsing code).
+- **Sequencing:** this is Phase 1 — later phases ship through this package. Because the correctness bugs (Phase 2) are still present, publish the first versions as a prerelease (`0.x` / `next` dist-tag) and promote to `latest` once Phase 2 lands. Combine the engine abstraction with the word-level timestamp work (Phase 3; same transcript-parsing code).
 
 ## Open questions for the owner
 - Is cut mode still wanted, or should `cut-video`/`createCutFile` be removed?
