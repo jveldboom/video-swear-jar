@@ -99,8 +99,8 @@ Trade-off: accurate cut = full software re-encode (slow for feature films, gener
 **Phase 4 — UX**
 - `--dry-run`, words report, `--skip-transcribe`, `--words`/`--exclude-words`, `--mode`, yargs cleanup, README/Makefile sync
 
-**Phase 5 — Infra**
-- Dockerfile modernization (Node 22 LTS, Python ≥3.11, pinned deps, `npm ci`, non-root)
+**Phase 5 — Docker image (low priority, optional)**
+- Kept as an alternative for users who don't want to install ffmpeg/Whisper on the host (and for Linux servers/NAS). Rebuild the image to install the published npm package (`npm i -g @jveldboom/video-swear-jar`) plus ffmpeg and a Whisper engine, instead of copying `src` in. Move to Node 22 LTS and Python ≥3.11, pin dependencies, run as non-root. Fix the Makefile Docker targets (`MAJOR_VERSION`, `node` path, `.PHONY`). Document that Docker on macOS is CPU-only and slower than the native install.
 
 **Phase 6 — Optional cut mode**
 - Port segment math + libx264/libx265 accurate cut behind `--mode cut`; opt-in tone-map
