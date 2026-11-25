@@ -12,15 +12,12 @@ Replace the Docker container with a small native Python tool. Ease of use is the
 
 ## Quality goal
 
-No video or audio quality loss. Changing resolution may become an option later, but not now.
+No noticeable video or audio quality loss. A small, invisible loss around each cut is acceptable. Changing resolution may become an option later, but not now.
 
-The cut engine as described doesn't meet this yet:
-
-- Re-encoding video (any hardware or `libx264`/`libx265` quality setting used so far) loses some quality.
-- Encoding audio to AAC loses some quality.
-- Tone-mapping HDR to SDR discards HDR. Under this goal it can't be the default.
-
-How to meet the goal is still to be decided.
+- **Video: smart cut.** Copy the original video and re-encode only the few seconds around each cut. Not yet proven; tested in phase 1.
+- **HDR is kept** by default. `--sdr` converts to SDR, which means re-encoding the whole video.
+- **Audio (proposed):** save as FLAC instead of AAC, keeping all channels. Files get bigger, Dolby Atmos or DTS:X positional data would likely be lost, and some players handle FLAC in MP4 poorly.
+- If smart cut doesn't work, decide again. Re-encoding the whole video has not been accepted as a fallback.
 
 ## Install
 
@@ -38,7 +35,7 @@ uv tool upgrade swearjar
 | Linux | `uv` and ffmpeg from the distro or a static build (to be verified) |
 
 - `uv` instead of a Homebrew formula: it works on all three platforms, and a formula would have to list every Python dependency.
-- The `zscale` filter (needed for HDR) isn't in every ffmpeg build. `swearjar` checks for it at startup and says what to install. On macOS it must also find `ffmpeg-full`, which isn't added to `PATH`.
+- The `zscale` filter (needed for `--sdr`) isn't in every ffmpeg build. `swearjar` checks for it when `--sdr` is used and says what to install. On macOS it must also find `ffmpeg-full`, which isn't added to `PATH`.
 - A short per-platform install script can reduce setup to one step.
 - The model downloads on first run. Long steps show progress.
 
@@ -69,7 +66,7 @@ uv tool upgrade swearjar
 
 ## Cut engine
 
-Port [`remove-cuts.sh`](https://github.com/jveldboom/utils/blob/main/ffmpeg/remove-cuts.sh) to Python: re-encode each kept segment, match the source codec and color, tone-map HDR to SDR, then concatenate. Detected words and `--cuts` files share it.
+Port [`remove-cuts.sh`](https://github.com/jveldboom/utils/blob/main/ffmpeg/remove-cuts.sh) to Python: keep its segment math, source detection and concatenation. Unlike the script, copy the video except around cuts (smart cut) and tone-map HDR to SDR only with `--sdr`. Detected words and `--cuts` files share it.
 
 The script only uses VideoToolbox, which is macOS-only. The port picks an encoder that works on the machine: VideoToolbox on macOS; NVENC, Quick Sync or AMF where available; otherwise `libx264`/`libx265` on the CPU. Quality settings need tuning per encoder.
 
@@ -82,7 +79,7 @@ Problems reproduced on test clips, each to be fixed and covered by a test:
 | Audio tagged only `fre`, or untagged MKV | Output has no audio, exit code 0 | Fall back to all audio tracks |
 | Indented line, or `to` instead of `-` | Silently skipped | Fail with the line number |
 | No arguments | `$1: unbound variable` | Show usage |
-| AAC encoded per segment | 100 cuts: 73.4s of decoded audio where 70s expected | Keep segment audio as PCM, encode AAC once |
+| AAC encoded per segment | 100 cuts: 73.4s of decoded audio where 70s expected | Keep segment audio as PCM, encode once |
 
 The PCM fix gave 70.06s of audio, but a decode check still showed video timestamp warnings that need investigating.
 
@@ -107,6 +104,7 @@ Python only, managed with `uv`; Node is removed. One engine on every platform is
    - Prove `whisper.cpp` builds and uses the GPU on the Mac and the Windows RX 7600.
    - Hand-label swear words in a few real movie clips. Compare missed words, timing error, run time and transcript quality.
    - Check that the AMD encoders (`h264_amf`, `hevc_amf`) cut accurately.
+   - Prove smart cut works on H.264 and HEVC, including HDR: accurate, in sync and without visible glitches at joins.
 2. **Core CLI.** `clean` (including embedded subtitles, `--mute` and `--cuts`) and `read-subtitles`, on all three platforms. Port the existing tests and add a many-cuts sync test. CI runs on macOS, Windows and Linux.
 3. **Subtitle tools.** `extract-subtitles` and `create-subtitles`, plus embedded-subtitle input for `read-subtitles`.
 4. **Install and release.** Install instructions or scripts per platform, startup checks, retire the Docker image with a note for `v1` users.
