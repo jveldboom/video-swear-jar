@@ -10,6 +10,18 @@ Replace the Docker container with a small native Python tool. Ease of use is the
 - The default model, `tiny.en`, is the least accurate English option offered.
 - One image carries Python, Node, ffmpeg and unpinned Whisper packages for two architectures.
 
+## Quality goal
+
+No video or audio quality loss. Changing resolution may become an option later, but not now.
+
+The cut engine as described doesn't meet this yet:
+
+- Re-encoding video (any hardware or `libx264`/`libx265` quality setting used so far) loses some quality.
+- Encoding audio to AAC loses some quality.
+- Tone-mapping HDR to SDR discards HDR. Under this goal it can't be the default.
+
+How to meet the goal is still to be decided.
+
 ## Install
 
 Proposed commands (the package doesn't exist yet). Each platform installs `uv` and ffmpeg, then:
