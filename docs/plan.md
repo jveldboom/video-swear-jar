@@ -43,6 +43,7 @@ uv tool upgrade swearjar
 ## Decisions
 
 - **`--cuts` replaces word detection.** Only the file's timestamps are used. The audio is still transcribed to make subtitles; `--no-subtitles` skips that. No separate `cut` command.
+- **Cut file format:** one removal per line as `HH:MM:SS - HH:MM:SS`, with or without milliseconds (`HH:MM:SS.mmm`) on either timestamp.
 - **Terminal only** for now.
 - **Cut by default.** `--mute` is the fast option that leaves the video untouched.
 - **Word detection uses the audio only.** Subtitle files are often inaccurate, so they never decide what gets cut. `read-subtitles` only reports.
