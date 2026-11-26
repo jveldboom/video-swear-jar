@@ -10,14 +10,43 @@ Replace the Docker container with a small native Python tool. Ease of use is the
 - The default model, `tiny.en`, is the least accurate English option offered.
 - One image carries Python, Node, ffmpeg and unpinned Whisper packages for two architectures.
 
+## Input goal
+
+Work with nearly any video file: different codecs, containers, resolutions, frame rates, bit depths, SDR and HDR, audio layouts, and imperfect timestamps.
+
+- No single sample file defines the design. A real file is one test case.
+- Don't assume a constant frame rate, a start time of zero, or that every packet decodes.
+- Each bug found in a real file gets a small synthetic test for the general case.
+- A file that can't be handled correctly fails with a clear message, never a silently broken output.
+- Tests use short clips so they run in minutes.
+
 ## Quality goal
 
-No noticeable video or audio quality loss. A small, invisible loss around each cut is acceptable. Changing resolution may become an option later, but not now.
+No noticeable video or audio quality loss. A small, invisible loss from re-encoding is acceptable. Changing resolution may become an option later, but not now.
 
-- **Video: smart cut.** Copy the original video and re-encode only the few seconds around each cut. Not yet proven; tested in phase 1.
-- **HDR is kept** by default. `--sdr` converts to SDR, which means re-encoding the whole video.
-- **Audio (proposed):** save as FLAC instead of AAC, keeping all channels. Files get bigger, Dolby Atmos or DTS:X positional data would likely be lost, and some players handle FLAC in MP4 poorly.
-- If smart cut doesn't work, decide again. Re-encoding the whole video has not been accepted as a fallback.
+- **Video: re-encode the whole video** with a hardware encoder where available, starting from the quality setting in `remove-cuts.sh` (VideoToolbox `-q:v 65`). `--mute` leaves the video untouched.
+- **HDR is kept** by default. `--sdr` converts to SDR. HDR is not yet tested on a real file.
+- **Audio:** re-encode once to AAC at 128 kbps per channel, capped at 640 kbps (5.1 gets 640), keeping all channels. This is one extra lossy generation, accepted so cuts stay exact. FLAC was rejected: on a full-length file it grew the audio from 202 MB to 1,106 MB. Dolby Atmos or DTS:X positional data would likely be lost.
+- **No volume compression:** ffmpeg applies dynamic range compression by default when decoding AC-3 and E-AC-3. Decode with `-drc_scale 0`.
+
+### Why not smart cut
+
+Smart cut (copy the original video, re-encode only around cuts) was prototyped and dropped. See [`spikes/smart-cut/`](../spikes/smart-cut/README.md).
+
+- It produced frame-accurate output for some H.264 and HEVC files, but needed format-specific fixes for each problem found.
+- VLC's hardware decoder failed at joins where the re-encoded sections' decoder settings differed from the source's, while ffmpeg decoded the same files correctly.
+- H.264 open-GOP sources were mostly re-encoded anyway, and other codecs were not handled.
+
+### Measured cost of re-encoding
+
+Hardware `-q:v 65` on two 60-second samples, on an M3 Pro:
+
+| Sample | VMAF average / worst 1% | Video size vs. source | Full-length time (estimate) |
+|---|---|---|---|
+| 1080p, 60 fps, 10-bit | 96.0 / 93.8 | 4.2x | 11 min |
+| 4K, 24 fps, 8-bit | 94.1 / 88.1 | 0.84x | 25 min |
+
+No visible difference was found by eye. **Open:** low-bitrate sources grow a lot. Test a bitrate target based on the source.
 
 ## Install
 
@@ -66,7 +95,9 @@ uv tool upgrade swearjar
 
 ## Cut engine
 
-Port [`remove-cuts.sh`](https://github.com/jveldboom/utils/blob/main/ffmpeg/remove-cuts.sh) to Python: keep its segment math, source detection and concatenation. Unlike the script, copy the video except around cuts (smart cut) and tone-map HDR to SDR only with `--sdr`. Detected words and `--cuts` files share it.
+**Known-good baseline:** `remove-cuts.sh` has worked well in real use, with no complaints about video glitches or audio pops.
+
+Port [`remove-cuts.sh`](https://github.com/jveldboom/utils/blob/main/ffmpeg/remove-cuts.sh) to Python: keep its segment math, source detection and concatenation. Unlike the script, tone-map HDR to SDR only with `--sdr`. Detected words and `--cuts` files share it.
 
 The script only uses VideoToolbox, which is macOS-only. The port picks an encoder that works on the machine: VideoToolbox on macOS; NVENC, Quick Sync or AMF where available; otherwise `libx264`/`libx265` on the CPU. Quality settings need tuning per encoder.
 
@@ -83,7 +114,7 @@ Problems reproduced on test clips, each to be fixed and covered by a test:
 
 The PCM fix gave 70.06s of audio, but a decode check still showed video timestamp warnings that need investigating.
 
-Not yet checked: HDR input, 10-bit SDR, chapter markers, real movie files, playback.
+Not yet checked: HDR input, chapter markers, full-length files.
 
 ## Transcription
 
@@ -104,7 +135,6 @@ Python only, managed with `uv`; Node is removed. One engine on every platform is
    - Prove `whisper.cpp` builds and uses the GPU on the Mac and the Windows RX 7600.
    - Hand-label swear words in a few real movie clips. Compare missed words, timing error, run time and transcript quality.
    - Check that the AMD encoders (`h264_amf`, `hevc_amf`) cut accurately.
-   - Prove smart cut works on H.264 and HEVC, including HDR: accurate, in sync and without visible glitches at joins.
 2. **Core CLI.** `clean` (including embedded subtitles, `--mute` and `--cuts`) and `read-subtitles`, on all three platforms. Port the existing tests and add a many-cuts sync test. CI runs on macOS, Windows and Linux.
 3. **Subtitle tools.** `extract-subtitles` and `create-subtitles`, plus embedded-subtitle input for `read-subtitles`.
 4. **Install and release.** Install instructions or scripts per platform, startup checks, retire the Docker image with a note for `v1` users.
