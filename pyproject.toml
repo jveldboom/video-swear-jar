@@ -1,0 +1,13 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "swearjar"
+version = "2.0.0.dev0"
+description = "Find swear words in a video's subtitles and write an editable cut list"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+swearjar = "swearjar.cli:main"
