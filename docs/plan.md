@@ -2,6 +2,30 @@
 
 Replace the Docker container with a small native Python tool. Ease of use is the top requirement. It's for other users too, so it supports macOS, Windows and Linux.
 
+## Next step: prove transcription accuracy
+
+**The rest of this plan is on hold until this is done.**
+
+The time-consuming parts of the current workflow are finding accurate subtitle files and checking the exact timestamp of each word. The project is worth building only if transcribing the audio can replace that work.
+
+**Test:** transcribe an original, uncut video that has already been cleaned by hand, and compare the results with its cut list. Use a file with many hits and some hard audio. Everything runs locally. Don't commit the video, subtitles, cut list or details of their content.
+
+Measure:
+
+- **Missed words** (matters most: catching them means watching the whole video)
+- **False hits** (quick to dismiss)
+- **Timing error** at the start and end of each word, and whether a little padding covers it
+
+Also test combining it with subtitles: subtitles say which words to expect, audio supplies exact times.
+
+| Result | Then |
+|---|---|
+| Nearly everything found and well timed | Build a small macOS tool: transcribe, write a cut list to skim, cut |
+| Good timing but some misses | The same, combined with subtitles. This changes the "audio only" detection decision below |
+| Poor on both | Stop and keep the current workflow |
+
+Windows, Linux and packaging wait until there is demand. This also covers most of #36.
+
 ## Why
 
 - Docker on a Mac can't use the Apple GPU, so transcription runs on CPU only.
