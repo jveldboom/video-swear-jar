@@ -20,14 +20,6 @@ docker-buildx:
 docker-push:
 	docker push --all-tags ${IMAGE_NAME}
 
-## Testing
-test-clean:
-	docker run --rm \
-		-v ${DIR}/.whisper:/app/.whisper \
-		-v ${DIR}/examples:/data \
-		${IMAGE_TAG} \
-		clean -i /data/curious-george.mp4 -m tiny.en -l en
-
 ## Targets Used for Development
 whisper:
 	docker run -it --rm \

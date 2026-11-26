@@ -25,8 +25,8 @@ Image subtitles are not supported.
 One entry per line, edited by hand:
 
 ```
-00:02:03 - 00:02:05        text from the subtitle
-00:06:07 - 00:06:10 [mute] text from the subtitle
+00:00:10 - 00:00:12        text from the subtitle
+00:01:00 - 00:01:03 [mute] text from the subtitle
 ```
 
 - Times are `HH:MM:SS`, with or without milliseconds.
@@ -62,7 +62,7 @@ Plain Python (3.10+) with no packages, plus ffmpeg. macOS comes first. Word list
 
 ## Not doing: transcription
 
-Finding words by transcribing the audio was tested with whisper.cpp `large-v3-turbo` on one episode. It found 27 of 28 hand-made cuts in about 10 minutes, but timing precision was never verified. Subtitles are faster and found all 28.
+Finding words by transcribing the audio was tested with whisper.cpp `large-v3-turbo`. It found nearly all hand-made cuts but was slow, and timing precision was never verified. Subtitles are faster and missed none of the spoken ones.
 
 ## Development
 

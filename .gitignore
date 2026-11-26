@@ -5,3 +5,19 @@ data/*
 node_modules
 coverage
 __pycache__/
+
+# Never commit real videos, subtitles, cut lists or secrets (see CLAUDE.md)
+*.mkv
+*.mp4
+*.mov
+*.avi
+*.m4v
+*.webm
+*.wav
+*.srt
+*.ass
+*.vtt
+*cuts*.txt
+.env*
+*.pem
+*.key
